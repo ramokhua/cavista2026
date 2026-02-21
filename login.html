@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeneShiled · log in</title>
+  <!-- Font Awesome for icons (optional but clean) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;        /* white base */
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* simple card – white with #00b5ff accents */
+    .login-container {
+      background: white;
+      width: 100%;
+      max-width: 440px;
+      padding: 2.5rem 2rem 2.8rem 2rem;
+      border-radius: 36px;
+      box-shadow: 0 20px 35px -8px rgba(0, 181, 255, 0.2),    /* #00b5ff shadow */
+                  0 8px 18px rgba(0,0,0,0.02);
+      border: 1px solid rgba(0, 181, 255, 0.15);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .login-container:hover {
+      transform: scale(1.01);
+      box-shadow: 0 28px 40px -12px rgba(0, 181, 255, 0.3);
+    }
+
+    /* GeneShiled branding — #00b5ff used everywhere */
+    .logo {
+      margin-bottom: 1.8rem;
+    }
+
+    .logo i {
+      font-size: 3.8rem;
+      color: #00b5ff;                /* primary blue */
+      filter: drop-shadow(0 6px 10px rgba(0, 181, 255, 0.2));
+    }
+
+    .logo h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #1a2634;
+      margin-top: 0.2rem;
+    }
+
+    .logo span {
+      color: #00b5ff;                /* blue accent */
+      font-weight: 500;
+    }
+
+    .sub-head {
+      color: #4a5b6b;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #f2f9ff;           /* very light blue tint */
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid rgba(0, 181, 255, 0.2);
+    }
+
+    .sub-head i {
+      color: #00b5ff;
+    }
+
+    /* form */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .input-group {
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      margin-left: 0.5rem;
+      color: #2b3d4f;
+      letter-spacing: -0.2px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #f9fcff;
+      border: 2px solid #e1effa;
+      border-radius: 60px;
+      padding: 0.75rem 1.2rem;
+      transition: all 0.15s ease;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #00b5ff;               /* blue focus */
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 181, 255, 0.15);
+    }
+
+    .input-wrapper i {
+      color: #7f9fbb;
+      font-size: 1.2rem;
+      width: 28px;
+      transition: color 0.15s;
+    }
+
+    .input-wrapper:focus-within i {
+      color: #00b5ff;                       /* icon turns blue */
+    }
+
+    .input-wrapper input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-size: 1rem;
+      padding: 0.2rem 0;
+      outline: none;
+      color: #1f2c38;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #b0c8db;
+      font-weight: 300;
+    }
+
+    /* simple options row */
+    .options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      margin: 0.2rem 0 0.5rem;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #2e4d6a;
+      cursor: pointer;
+    }
+
+    .remember input[type="checkbox"] {
+      accent-color: #00b5ff;                /* blue checkbox */
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+
+    .forgot-link {
+      color: #00b5ff;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 181, 255, 0.2);
+    }
+
+    .forgot-link:hover {
+      color: #0080c0;
+      border-bottom-color: #00b5ff;
+    }
+
+    /* primary button — filled #00b5ff */
+    .login-btn {
+      background: #00b5ff;
+      border: none;
+      border-radius: 60px;
+      padding: 1rem 1.8rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 20px -7px #00b5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .login-btn:hover {
+      background: #0099dd;
+      transform: scale(1.02);
+      box-shadow: 0 16px 24px -8px #00b5ff;
+    }
+
+    .login-btn i {
+      font-size: 1.2rem;
+    }
+
+    .signup-text {
+      margin-top: 2rem;
+      color: #4d6278;
+      font-size: 0.95rem;
+    }
+
+    .signup-text a {
+      color: #00b5ff;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(0, 181, 255, 0.2);
+    }
+
+    .signup-text a:hover {
+      color: #007bb5;
+      border-bottom-color: #00b5ff;
+    }
+
+    /* tiny footer note */
+    .theme-note {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #9cb1c5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-top: 1px solid rgba(0, 181, 255, 0.2);
+      padding-top: 1.2rem;
+    }
+
+    .theme-note i {
+      color: #00b5ff;
+    }
+
+    /* remove extra style from previous, keep minimal */
+    hr {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- GeneShiled logo with #00b5ff -->
+    <div class="logo">
+      
+      <h1>Gene<span>Shield</span></h1>
+    </div>
+
+    <!-- simple login form -->
+    <form class="login-form" action="#" method="post">
+      <div class="input-group">
+        <label for="email">email or username</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user"></i>
+          <input type="text" id="email" placeholder="you@example.com" autocomplete="username">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="password">password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="········" autocomplete="current-password">
+        </div>
+      </div>
+
+      <div class="options-row">
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="login-btn">
+        <span>LOG IN</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="signup-text">
+      new here? <a href="#">create account</a>
+    </div>
+
+   
+  </div>
+
+  <!-- (optional) very subtle background hint of blue, but stays white-dominant -->
+  <div style="position: fixed; bottom: 20px; right: 20px; opacity: 0.2; pointer-events: none; font-size: 3rem; color: #00b5ff;"> 
+    <i class="fas fa-shield-virus"></i>
+  </div>
+</body>
+</html>

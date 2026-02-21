@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeneShiled · sign up</title>
+  <!-- Font Awesome 6 (free) for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;        /* white base */
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* simple card – white with #00b5ff accents (identical to login) */
+    .signup-container {
+      background: white;
+      width: 100%;
+      max-width: 480px;                  /* slightly wider for more fields */
+      padding: 2.5rem 2rem 2.8rem 2rem;
+      border-radius: 36px;
+      box-shadow: 0 20px 35px -8px rgba(0, 181, 255, 0.2),    /* #00b5ff shadow */
+                  0 8px 18px rgba(0,0,0,0.02);
+      border: 1px solid rgba(0, 181, 255, 0.15);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .signup-container:hover {
+      transform: scale(1.01);
+      box-shadow: 0 28px 40px -12px rgba(0, 181, 255, 0.3);
+    }
+
+    /* GeneShiled branding — #00b5ff used everywhere (same as login) */
+    .logo {
+      margin-bottom: 1.8rem;
+    }
+
+    .logo i {
+      font-size: 3.8rem;
+      color: #00b5ff;                /* primary blue */
+      filter: drop-shadow(0 6px 10px rgba(0, 181, 255, 0.2));
+    }
+
+    .logo h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #1a2634;
+      margin-top: 0.2rem;
+    }
+
+    .logo span {
+      color: #00b5ff;                /* blue accent */
+      font-weight: 500;
+    }
+
+    .sub-head {
+      color: #4a5b6b;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #f2f9ff;           /* very light blue tint */
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid rgba(0, 181, 255, 0.2);
+    }
+
+    .sub-head i {
+      color: #00b5ff;
+    }
+
+    /* form */
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;                    /* slightly tighter for many fields */
+      margin-top: 1.5rem;
+    }
+
+    .input-group {
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      margin-left: 0.5rem;
+      color: #2b3d4f;
+      letter-spacing: -0.2px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #f9fcff;
+      border: 2px solid #e1effa;
+      border-radius: 60px;
+      padding: 0.75rem 1.2rem;
+      transition: all 0.15s ease;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #00b5ff;               /* blue focus */
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 181, 255, 0.15);
+    }
+
+    .input-wrapper:focus-within i {
+      color: #00b5ff;                       /* icon turns blue */
+    }
+
+    .input-wrapper i {
+      color: #7f9fbb;
+      font-size: 1.2rem;
+      width: 28px;
+      transition: color 0.15s;
+    }
+
+    .input-wrapper input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-size: 1rem;
+      padding: 0.2rem 0;
+      outline: none;
+      color: #1f2c38;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #b0c8db;
+      font-weight: 300;
+    }
+
+    /* name row - two fields inline */
+    .name-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+
+    .name-row .input-group {
+      flex: 1;
+    }
+
+
+    /* primary button — filled #00b5ff (identical to login) */
+    .signup-btn {
+      background: #00b5ff;
+      border: none;
+      border-radius: 60px;
+      padding: 1rem 1.8rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 20px -7px #00b5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .signup-btn:hover {
+      background: #0099dd;
+      transform: scale(1.02);
+      box-shadow: 0 16px 24px -8px #00b5ff;
+    }
+
+    .signup-btn i {
+      font-size: 1.2rem;
+    }
+
+    .login-text {
+      margin-top: 2rem;
+      color: #4d6278;
+      font-size: 0.95rem;
+    }
+
+    .login-text a {
+      color: #00b5ff;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(0, 181, 255, 0.2);
+    }
+
+    .login-text a:hover {
+      color: #007bb5;
+      border-bottom-color: #00b5ff;
+    }
+
+    /* mobile tweak */
+    @media (max-width: 480px) {
+      .name-row {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <!-- GeneShiled logo with #00b5ff (identical to login) -->
+    <div class="logo">
+      <h1>Gene<span>Shield</span></h1>
+    </div>
+
+    <!-- sign up form - matches login styling exactly -->
+    <form class="signup-form" action="#" method="post">
+      <!-- first & last name row (inline) -->
+      <div class="name-row">
+        <div class="input-group">
+          <label for="firstname">first name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="firstname" placeholder="Alex" autocomplete="given-name">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="lastname">last name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="lastname" placeholder="Chen" autocomplete="family-name">
+          </div>
+        </div>
+      </div>
+
+      <!-- email -->
+      <div class="input-group">
+        <label for="email">email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="alex@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <!-- password -->
+      <div class="input-group">
+        <label for="password">password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="········" autocomplete="new-password">
+        </div>
+      </div>
+
+      <!-- confirm password -->
+      <div class="input-group">
+        <label for="confirm-password">confirm password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirm-password" placeholder="········" autocomplete="off">
+        </div>
+      </div>
+
+
+      <button type="submit" class="signup-btn">
+        <span>create account</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="login-text">
+      already have an account? <a href="login.html">log in</a>
+    </div>
+
+
+  </div>
+
+  <!-- subtle background element (same as login) -->
+  <div style="position: fixed; bottom: 20px; right: 20px; opacity: 0.2; pointer-events: none; font-size: 3rem; color: #00b5ff;"> 
+    <i class="fas fa-shield-virus"></i>
+  </div>
+</body>
+</html>

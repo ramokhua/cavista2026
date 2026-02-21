@@ -1,13 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GeneShield — Redirecting</title>
-  <meta http-equiv="refresh" content="0; url=dashboard.html" />
-  <script>setTimeout(() => { window.location.href = 'dashboard.html'; }, 100);</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneShiled · protecting generations through AI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <p>Redirecting to <a href="dashboard.html">Dashboard</a>…</p>
+    <div class="cursor-glow" id="glow"></div>
+    <canvas id="dna-canvas"></canvas>
+
+    <nav class="nav" id="nav">
+        <div class="nav-brand">
+            <!-- SHINY BLUE SHIELD WITH CROSS - NO ROTATION, JUST SHINE -->
+            <div class="nav-logo">
+                <div class="shield">
+                    <div class="shield-cross"></div>
+                </div>
+            </div>
+            <span class="nav-wordmark">GeneShield</span>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-link">Sign In</a>
+            <a href="#" class="nav-cta">Get Started <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <h1>Protecting <i class="shimmer">Generations</i><br>Through <i>AI Health</i></h1>
+            <p class="hero-desc">We combine generational family history with AI-powered risk analysis to predict disease before it strikes — protecting families, one generation at a time.</p>
+            <div class="hero-actions">
+                <a href="#" class="btn-glow btn-glow-primary">Begin Your Health Journey <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+                <a href="#" class="btn-glow btn-glow-ghost">Sign In</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="ticker">
+        <div class="ticker-track" id="ticker">
+            <div class="ticker-item"><span class="num">46%</span> of NCD-related deaths</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">28.6%</span> adults with hypertension</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">1 in 3</span> at cardiovascular risk</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">AI-Powered</span> generational risk engine</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">Real-Time</span> remote monitoring</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">Clinician</span> validated reports</div><div class="ticker-dot"></div>
+            <!-- duplicated for seamless loop -->
+            <div class="ticker-item"><span class="num">46%</span> of NCD-related deaths</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">28.6%</span> adults with hypertension</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">1 in 3</span> at cardiovascular risk</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">AI-Powered</span> generational risk engine</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">Real-Time</span> remote monitoring</div><div class="ticker-dot"></div>
+            <div class="ticker-item"><span class="num">Clinician</span> validated reports</div><div class="ticker-dot"></div>
+        </div>
+    </div>
+
+    <div class="gradient-bridge"></div>
+
+    <section class="light-section">
+        <div class="bento">
+            <div class="sec-head reveal">
+                <span class="overline">Core Features</span>
+                <h2>Three Pillars of <i>Protection</i></h2>
+                <p>An AI-powered system that catches what clinics miss</p>
+            </div>
+            <div class="bento-grid">
+                <div class="bc bc-7 bc-blue reveal">
+                    <div class="bc-deco bc-deco-circle" style="color:var(--primary)"></div>
+                    <div class="bc-icon bci-blue">🧬</div>
+                    <span class="bc-overline">Pillar 01</span>
+                    <div class="bc-title">Generational Risk Engine</div>
+                    <div class="bc-desc">Input your family's health tree — parents, grandparents, siblings — and our logistic regression model generates personalised risk percentages for Type 2 Diabetes, Hypertension, Cardiovascular Disease, and Chronic Kidney Disease. Your ancestors become your health compass.</div>
+                </div>
+                <div class="bc bc-5 bc-dark reveal reveal-d1">
+                    <div class="bc-deco bc-deco-dots" style="color:#fff"></div>
+                    <div class="bc-icon bci-amber">📊</div>
+                    <span class="bc-overline">Pillar 02</span>
+                    <div class="bc-title">Remote Monitoring</div>
+                    <div class="bc-desc">Log vitals, track symptoms, record illness history. AI detects dangerous thresholds and emerging patterns before they become emergencies.</div>
+                </div>
+                <div class="bc bc-4 bc-gradient reveal reveal-d2">
+                    <div class="bc-icon" style="background:rgba(255,255,255,0.2);color:#fff">💬</div>
+                    <span class="bc-overline" style="color:rgba(255,255,255,0.7)">Pillar 03</span>
+                    <div class="bc-title">AI Health Companion</div>
+                    <div class="bc-desc">Chat with a context-aware AI that knows your history, explains risks in plain language, and guides preventive action.</div>
+                </div>
+                <div class="bc bc-8 bc-glass reveal reveal-d3">
+                    <div class="bc-deco bc-deco-circle" style="color:var(--primary)"></div>
+                    <div class="bc-icon bci-purple">👨‍⚕️</div>
+                    <span class="bc-overline">For Doctors</span>
+                    <div class="bc-title">Clinician Review Portal</div>
+                    <div class="bc-desc">Patients share their AI-generated risk reports directly with their doctors. Doctors view risk scores and recommended tests — then validate or adjust before clinical use. Simple, secure, and built for professional oversight.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="steps">
+            <div class="sec-head reveal">
+                <span class="overline">Patient Journey</span>
+                <h2>How It <i>Works</i></h2>
+            </div>
+            <div class="steps-grid reveal">
+                <div class="step"><div class="step-circle">1</div><h4>Create Account</h4><p>Sign up as a patient or clinician in under 30 seconds</p></div>
+                <div class="step"><div class="step-circle">2</div><h4>Enter History</h4><p>Family conditions, symptoms, lifestyle, and illness records</p></div>
+                <div class="step"><div class="step-circle">3</div><h4>AI Analysis</h4><p>Generational risk scores computed. Narrative generated.</p></div>
+                <div class="step"><div class="step-circle">4</div><h4>Doctor Review</h4><p>Clinical report sent for professional validation</p></div>
+            </div>
+        </div>
+
+       
+    </section>
+
+    <footer class="footer">
+        <div class="footer-brand">
+            <div class="fl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12c0-3 1.5-6 4-6s4 3 4 6-1.5 6-4 6-4-3-4-6z"/></svg></div>
+            <span>GeneShiled</span>
+        </div>
+        <p>&copy; 2026 — Cavista Hackathon, Botswana Edition</p>
+        <p class="footer-team">Built with ❤️ by Boitsholo, Jemima, Abigail & Atlang</p>
+    </footer>
+
+    <script>
+        // ═══ Cursor Glow ═══
+        const glow=document.getElementById('glow');
+        document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'});
+
+        // ═══ DNA Helix Canvas ═══
+        const c=document.getElementById('dna-canvas'),x=c.getContext('2d');
+        function rz(){c.width=innerWidth;c.height=innerHeight}rz();addEventListener('resize',rz);
+        let t=0;
+        function drawDNA(){
+            x.clearRect(0,0,c.width,c.height);
+            const cx=c.width/2,pts=28,sp=c.height/(pts-1);
+            for(let i=0;i<pts;i++){
+                const y=i*sp,ph=t+i*0.3;
+                const x1=cx+Math.sin(ph)*120,x2=cx+Math.sin(ph+Math.PI)*120;
+                const a=0.15+Math.abs(Math.sin(ph))*0.15;
+                // Connecting lines
+                x.beginPath();x.moveTo(x1,y);x.lineTo(x2,y);
+                x.strokeStyle=`rgba(0,181,255,${a*0.3})`;x.lineWidth=1;x.stroke();
+                // Dots
+                x.beginPath();x.arc(x1,y,3+Math.abs(Math.sin(ph))*2,0,Math.PI*2);
+                x.fillStyle=`rgba(0,181,255,${a})`;x.fill();
+                x.beginPath();x.arc(x2,y,3+Math.abs(Math.cos(ph))*2,0,Math.PI*2);
+                x.fillStyle=`rgba(56,184,255,${a})`;x.fill();
+            }
+            t+=0.015;requestAnimationFrame(drawDNA);
+        }
+        drawDNA();
+
+        // ═══ Scroll Nav ═══
+        addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>60));
+
+        // ═══ Reveal ═══
+        const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:0.12});
+        document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    </script>
 </body>
 </html>
