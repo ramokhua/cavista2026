@@ -141,7 +141,7 @@
   <script src="js/supabase.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      await requireAuth();
+      // Authentication disabled for local frontend workflow; backend integration later.
       const logoutLink = document.querySelector('.sidebar .logout');
       if (logoutLink) {
         logoutLink.addEventListener('click', async (e) => {

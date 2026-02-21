@@ -130,6 +130,26 @@ async function sendMessage(userText) {
   chatHistory.push({ role: 'user', content: userText });
   showTyping();
 
+  // If the CLAUDE API key is not provided, use a local mock reply
+  if (!CLAUDE_API_KEY || CLAUDE_API_KEY === 'YOUR_CLAUDE_API_KEY_HERE') {
+    try {
+      const aiReply = await generateMockReply(userText);
+      chatHistory.push({ role: 'assistant', content: aiReply });
+      saveHistory();
+      removeTyping();
+      renderAIMessage(aiReply);
+    } catch (err) {
+      removeTyping();
+      renderAIMessage("I'm having trouble generating a response right now. Please try again later.");
+      console.error('Mock reply error:', err);
+    }
+
+    isTyping = false;
+    if (sendBtn) sendBtn.disabled = false;
+    return;
+  }
+
+  // Real API call (when key is present)
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -160,6 +180,21 @@ async function sendMessage(userText) {
 
   isTyping = false;
   if (sendBtn) sendBtn.disabled = false;
+}
+
+// Simple local mock reply generator to allow front-end testing without backend.
+async function generateMockReply(userText) {
+  // Simulate typing / thinking delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  const lower = userText.toLowerCase();
+  if (lower.includes('hello') || lower.includes('hi')) return 'Hi there! How can I help you with hereditary cancer information today?';
+  if (lower.includes('mammogram') || lower.includes('breast')) return 'For breast cancer screening, consider a clinical breast exam and mammography according to local guidelines. Speak to your clinician about your family history.';
+  if (lower.includes('colon') || lower.includes('colorectal')) return 'For colorectal cancer, screening options include faecal immunochemical test (FIT) and colonoscopy depending on risk and availability.';
+  if (lower.includes('thanks') || lower.includes('thank')) return "You're welcome — glad to help!";
+
+  // Default helpful reply using user context
+  return `I don't have a live AI backend configured, but based on your profile I can suggest: ${getUserContext().split('\n').slice(0,5).join(' ')}. For more detailed answers, provide more specifics or configure an API key.`;
 }
 
 // ── PROMPT CHIPS ──
@@ -220,3 +255,73 @@ if (clearChatBtn) {
 
 // ── INIT ──
 loadHistory();
+
+// ── LOCAL-MOCK AUTH HELPERS (front-end only) ──
+const MOCK_AUTH = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+
+if (MOCK_AUTH) {
+  // ensure a demo profile exists for UI rendering
+  const existing = localStorage.getItem('geneshield_profile');
+  if (!existing) {
+    const demoProfile = {
+      firstName: 'Test',
+      lastName: 'User',
+      district: 'Gaborone',
+      currentConditions: [],
+      medications: '',
+      exercise: 'regular',
+      diet: 'average',
+      smoke: 'no',
+      alcohol: 'occasionally',
+      fatherHistory: ['breast'],
+      motherHistory: [],
+      grandHistory: [],
+      dob: '1988-04-12',
+      gender: 'female',
+      height: 165,
+      weight: 68
+    };
+    localStorage.setItem('geneshield_profile', JSON.stringify(demoProfile));
+  }
+
+  // create a lightweight mock user session
+  if (!localStorage.getItem('geneshield_mock_user')) {
+    const mockUser = { id: 'mock-user-1', email: 'demo@local', user_metadata: { first_name: 'Test', last_name: 'User' } };
+    localStorage.setItem('geneshield_mock_user', JSON.stringify(mockUser));
+  }
+}
+
+async function getCurrentUser() {
+  if (MOCK_AUTH) return JSON.parse(localStorage.getItem('geneshield_mock_user'));
+  // if supabase client exists, try to get actual user
+  if (window.supabase) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      return user;
+    } catch (err) { return null; }
+  }
+  return null;
+}
+
+async function requireAuth() {
+  const user = await getCurrentUser();
+  if (!user) {
+    window.location.href = 'login.html';
+    return null;
+  }
+  return user;
+}
+
+async function signOut() {
+  if (MOCK_AUTH) {
+    localStorage.removeItem('geneshield_mock_user');
+    // keep demo profile for convenience, but navigate to login
+    window.location.href = 'login.html';
+    return;
+  }
+  if (window.supabase && supabase.auth && supabase.auth.signOut) {
+    try { await supabase.auth.signOut(); window.location.href = 'login.html'; } catch { window.location.href = 'login.html'; }
+  } else {
+    window.location.href = 'login.html';
+  }
+}
