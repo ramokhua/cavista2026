@@ -24,6 +24,16 @@ body { font-family: var(--font); background: var(--white); color: var(--dark); o
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
+/* ── GLOBAL SIDEBAR & GREETING OVERRIDES (consistency across pages) ── */
+.sidebar { width: var(--sidebar-w,240px); background: var(--white); position: fixed; top: 0; left: 0; bottom: 0; display: flex; flex-direction: column; padding: 24px 0; z-index: 200; transition: var(--transition); border-right: 4px solid var(--primary); }
+.sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 20px 28px; border-bottom: 1px solid rgba(0,181,255,0.08); }
+.brand-name { font-size: 1.2rem; font-weight: 800; color: var(--dark); }
+.nav-item { color: var(--dark); }
+
+.greeting-card { background: var(--white); border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 2px solid var(--primary); }
+.greeting-card .greeting-text h2 { color: var(--dark); }
+.greeting-card .greeting-text p { color: var(--gray); }
+
 /* ── BUTTONS ── */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
