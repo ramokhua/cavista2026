@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeneShield | Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body>
 
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class='bx bx-shield-plus'></i></div>
+      <span class="brand-name">Gene<span class="brand-accent">Shield</span></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item active"><i class='bx bx-grid-alt'></i><span>Dashboard</span></a>
+      <a href="vitals.html" class="nav-item"><i class='bx bx-pulse'></i><span>Log Vitals</span></a>
+      <a href="chat.html" class="nav-item"><i class='bx bx-bot'></i><span>AI Companion</span></a>
+      <a href="#" class="nav-item"><i class='bx bx-dna'></i><span>Risk Report</span></a>
+      <a href="onboarding.html" class="nav-item"><i class='bx bx-user'></i><span>Profile</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <!-- GAP: Logout should clear Supabase session (Jemima) then go to landing or index -->
+      <a href="landing.html" class="nav-item logout"><i class='bx bx-log-out'></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></button>
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+
+      <div class="greeting-card">
+        <div class="greeting-text">
+          <h2 id="greetingMsg">Good morning 👋</h2>
+          <p>Here's your cancer risk overview. You have <strong>2 new screening recommendations</strong> from your AI companion.</p>
+        </div>
+        <a href="vitals.html" class="btn-log"><i class='bx bx-plus'></i> Log Today's Vitals</a>
+      </div>
+
+      <section class="section-block">
+        <div class="section-title-row">
+          <h3 class="section-title">Hereditary Cancer Risk Assessment</h3>
+          <span class="section-tag">AI-Generated</span>
+        </div>
+        <div class="risk-grid">
+          <div class="risk-score-card high">
+            <div class="rsc-header"><div class="rsc-icon"><i class='bx bx-ribbon'></i></div><span class="rsc-badge high">High</span></div>
+            <h4>Breast Cancer</h4>
+            <div class="rsc-gauge"><div class="gauge-fill" style="width:72%"></div></div>
+            <div class="rsc-stats"><span class="rsc-percent">72%</span><span class="rsc-note">Family history detected</span></div>
+            <p class="rsc-tip">Schedule a mammogram. Discuss BRCA gene testing with your doctor.</p>
+          </div>
+          <div class="risk-score-card moderate">
+            <div class="rsc-header"><div class="rsc-icon"><i class='bx bx-female'></i></div><span class="rsc-badge moderate">Moderate</span></div>
+            <h4>Cervical Cancer</h4>
+            <div class="rsc-gauge"><div class="gauge-fill" style="width:48%"></div></div>
+            <div class="rsc-stats"><span class="rsc-percent">48%</span><span class="rsc-note">HPV risk factor noted</span></div>
+            <p class="rsc-tip">Get a Pap smear every 3 years. HPV vaccination is highly protective.</p>
+          </div>
+          <div class="risk-score-card low">
+            <div class="rsc-header"><div class="rsc-icon"><i class='bx bx-male'></i></div><span class="rsc-badge low">Low</span></div>
+            <h4>Prostate Cancer</h4>
+            <div class="rsc-gauge"><div class="gauge-fill" style="width:19%"></div></div>
+            <div class="rsc-stats"><span class="rsc-percent">19%</span><span class="rsc-note">No family history</span></div>
+            <p class="rsc-tip">Annual PSA screening from age 50, or 40 if family history present.</p>
+          </div>
+          <div class="risk-score-card moderate">
+            <div class="rsc-header"><div class="rsc-icon"><i class='bx bx-dna'></i></div><span class="rsc-badge moderate">Moderate</span></div>
+            <h4>Colorectal Cancer</h4>
+            <div class="rsc-gauge"><div class="gauge-fill" style="width:54%"></div></div>
+            <div class="rsc-stats"><span class="rsc-percent">54%</span><span class="rsc-note">Paternal history noted</span></div>
+            <p class="rsc-tip">Colonoscopy recommended from age 40. Increase fibre, reduce red meat.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="two-col">
+        <section class="section-block">
+          <div class="section-title-row">
+            <h3 class="section-title">Recent Vitals</h3>
+            <a href="vitals.html" class="section-link">View All <i class='bx bx-right-arrow-alt'></i></a>
+          </div>
+          <div class="vitals-list">
+            <div class="vital-row">
+              <div class="vital-icon bp"><i class='bx bx-pulse'></i></div>
+              <div class="vital-info"><span class="vital-name">Blood Pressure</span><span class="vital-date">Today, 08:30</span></div>
+              <div class="vital-value"><span class="vital-reading">128/84</span><span class="vital-unit">mmHg</span></div>
+              <span class="vital-status warn">Elevated</span>
+            </div>
+            <div class="vital-row">
+              <div class="vital-icon glucose"><i class='bx bx-droplet'></i></div>
+              <div class="vital-info"><span class="vital-name">Blood Glucose</span><span class="vital-date">Yesterday, 07:15</span></div>
+              <div class="vital-value"><span class="vital-reading">6.2</span><span class="vital-unit">mmol/L</span></div>
+              <span class="vital-status ok">Normal</span>
+            </div>
+            <div class="vital-row">
+              <div class="vital-icon weight"><i class='bx bx-dumbbell'></i></div>
+              <div class="vital-info"><span class="vital-name">Weight</span><span class="vital-date">2 days ago</span></div>
+              <div class="vital-value"><span class="vital-reading">78.4</span><span class="vital-unit">kg</span></div>
+              <span class="vital-status ok">Stable</span>
+            </div>
+            <div class="vital-row">
+              <div class="vital-icon hr"><i class='bx bx-heart'></i></div>
+              <div class="vital-info"><span class="vital-name">Heart Rate</span><span class="vital-date">2 days ago</span></div>
+              <div class="vital-value"><span class="vital-reading">72</span><span class="vital-unit">bpm</span></div>
+              <span class="vital-status ok">Normal</span>
+            </div>
+          </div>
+          <a href="vitals.html" class="log-vitals-btn"><i class='bx bx-plus-circle'></i> Log New Vitals</a>
+        </section>
+      </div>
+
+      <section class="section-block">
+        <div class="section-title-row">
+          <h3 class="section-title">Personalised Cancer Prevention Tips</h3>
+          <span class="section-tag">Based on your risk profile</span>
+        </div>
+        <div class="tips-grid">
+          <div class="tip-card red"><i class='bx bx-error-circle'></i><div><strong>Schedule a Mammogram</strong><p>Your breast cancer risk is high due to family history. Book a mammogram this month and ask your doctor about BRCA genetic testing.</p></div></div>
+          <div class="tip-card yellow"><i class='bx bx-info-circle'></i><div><strong>Get Your Pap Smear</strong><p>Cervical cancer is highly preventable. A Pap smear every 3 years — or every 5 with HPV co-testing — can catch changes before they become cancer.</p></div></div>
+          <div class="tip-card green"><i class='bx bx-check-circle'></i><div><strong>Boost Your Diet</strong><p>A high-fibre, plant-rich diet with less red and processed meat significantly lowers colorectal cancer risk. Your gut health is your shield.</p></div></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await requireAuth();
+      const logoutLink = document.querySelector('.sidebar .logout');
+      if (logoutLink) {
+        logoutLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await signOut(); } catch { window.location.href = 'login.html'; }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
