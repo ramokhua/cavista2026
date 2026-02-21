@@ -25,7 +25,5 @@ GeneShield is a comprehensive web application designed to streamline and enhance
 - **Home Page:** The landing page that provides an overview of the application.
 - **Login Page:** The page where users can authenticate themselves.
 - **Dashboard:** Displays analytics and metrics for logged-in users.
-- **User Management Page:** Allows administrators to manage user accounts.
-- **Settings Page:** Where users can adjust their preferences.
 
 For more information on specific components, please refer to the individual component documentation.
