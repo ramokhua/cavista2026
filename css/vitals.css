@@ -1,0 +1,71 @@
+.quick-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.qs-card { background: var(--white); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); }
+.qs-card i { font-size: 1.8rem; color: var(--primary); }
+.qs-num { display: block; font-size: 1.6rem; font-weight: 900; color: var(--dark); line-height: 1; }
+.qs-label { font-size: 0.78rem; color: var(--gray); font-weight: 500; }
+
+.vitals-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+.vitals-form-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+
+.vital-input-card { background: var(--gray-light); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px; transition: var(--transition); }
+.vital-input-card:focus-within { border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(0,181,255,0.08); }
+.vic-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.vic-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.vic-icon.bp { background: rgba(239,68,68,0.1); color: var(--danger); }
+.vic-icon.glucose { background: rgba(245,158,11,0.1); color: var(--warning); }
+.vic-icon.hr { background: rgba(16,185,129,0.1); color: var(--success); }
+.vic-icon.weight { background: rgba(0,181,255,0.1); color: var(--primary); }
+.vic-icon.temp { background: rgba(239,68,68,0.08); color: #f87171; }
+.vic-icon.o2 { background: rgba(99,102,241,0.1); color: #6366f1; }
+.vic-header h4 { font-size: 0.85rem; font-weight: 700; color: var(--dark); }
+.vic-header span { font-size: 0.72rem; color: var(--gray); }
+
+.single-input input { width: 100%; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px; font-family: var(--font); font-size: 1.1rem; font-weight: 700; color: var(--dark); outline: none; transition: var(--transition); text-align: center; }
+.single-input input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,181,255,0.1); }
+
+.bp-inputs { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.bp-field { flex: 1; }
+.bp-field label { display: block; font-size: 0.72rem; color: var(--gray); margin-bottom: 4px; font-weight: 500; }
+.bp-field input { width: 100%; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 8px; font-family: var(--font); font-size: 1.1rem; font-weight: 700; color: var(--dark); outline: none; text-align: center; transition: var(--transition); }
+.bp-field input:focus { border-color: var(--primary); }
+.bp-divider { font-size: 1.4rem; color: var(--gray); font-weight: 700; margin-top: 16px; }
+.vic-ref { font-size: 0.7rem; color: var(--gray); line-height: 1.4; margin-top: 8px; }
+
+.form-group-v { display: flex; flex-direction: column; gap: 8px; }
+.v-label { font-size: 0.88rem; font-weight: 600; color: var(--dark); }
+.label-hint { color: var(--gray); font-weight: 400; }
+
+.symptom-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.sym-item { display: flex; align-items: center; gap: 6px; background: var(--gray-light); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 10px; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: var(--dark); transition: var(--transition); }
+.sym-item:hover { border-color: var(--primary); background: var(--primary-light); }
+.sym-item input { accent-color: var(--primary); width: 14px; height: 14px; }
+.sym-item i { color: var(--primary); font-size: 0.9rem; }
+
+textarea { width: 100%; background: var(--gray-light); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-family: var(--font); font-size: 0.9rem; color: var(--dark); outline: none; resize: vertical; transition: var(--transition); line-height: 1.6; }
+textarea:focus { border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(0,181,255,0.1); }
+
+.btn-save-vitals { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: var(--primary); color: var(--white); border: none; border-radius: 50px; padding: 14px; font-family: var(--font); font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 24px; transition: var(--transition); box-shadow: 0 4px 16px rgba(0,181,255,0.3); }
+.btn-save-vitals:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+.history-list { display: flex; flex-direction: column; gap: 12px; }
+.history-entry { background: var(--gray-light); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; transition: var(--transition); }
+.history-entry:hover { border-color: var(--primary); }
+.he-date { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin-bottom: 10px; }
+.he-metrics { display: grid; grid-template-columns: repeat(2,1fr); gap: 6px; margin-bottom: 8px; }
+.he-metric { display: flex; justify-content: space-between; align-items: center; }
+.he-label { font-size: 0.75rem; color: var(--gray); }
+.he-val { font-size: 0.82rem; font-weight: 700; }
+.he-val.ok { color: var(--success); }
+.he-val.warn { color: var(--warning); }
+.he-val.high { color: var(--danger); }
+.he-sym { font-size: 0.75rem; color: var(--gray); font-style: italic; }
+
+.toast { position: fixed; bottom: 32px; right: 32px; background: var(--dark); color: var(--white); display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.4s ease; z-index: 9999; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast i { color: var(--success); font-size: 1.2rem; }
+
+.mt-20 { margin-top: 20px; }
+.mt-16 { margin-top: 16px; }
+
+@media (max-width: 1100px) { .vitals-layout { grid-template-columns: 1fr; } .vitals-form-grid { grid-template-columns: repeat(2,1fr); } .quick-stats { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px) { .vitals-form-grid { grid-template-columns: 1fr; } .symptom-grid { grid-template-columns: repeat(2,1fr); } }
