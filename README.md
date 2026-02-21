@@ -1,7 +1,7 @@
-# Cavista2026 Frontend Documentation
+# GeneShield Documentation
 
 ## Project Overview
-Cavista2026 is a comprehensive web application designed to streamline and enhance various workflows. This documentation covers the frontend aspects of the project, providing insights into its structure and features.
+GeneShield is a comprehensive web application designed to streamline and enhance various workflows. This documentation covers the frontend aspects of the project, providing insights into its structure and features.
 
 ## Features
 - User-friendly interface
