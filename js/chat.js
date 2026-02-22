@@ -1,71 +1,32 @@
 // ================================================================
-// ⚠️  ADD YOUR CLAUDE API KEY HERE BEFORE RUNNING
+// GeneShield Chat — uses Flask backend for Claude API
 // ================================================================
-const CLAUDE_API_KEY = 'YOUR_CLAUDE_API_KEY_HERE';
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
 
 let chatHistory = [];
 let isTyping = false;
 
-// ── LOAD PERSISTED HISTORY ──
-function loadHistory() {
-  const saved = localStorage.getItem('geneshield_chat_history');
-  if (saved) {
-    chatHistory = JSON.parse(saved);
-    chatHistory.forEach(msg => {
-      if (msg.role === 'user') renderUserMessage(msg.content, false);
-      else renderAIMessage(msg.content, false);
-    });
+// ── LOAD PERSISTED HISTORY FROM SERVER ──
+async function loadHistory() {
+  try {
+    const history = await getChatHistory();
+    if (history && history.length) {
+      chatHistory = history.map(m => ({ role: m.role, content: m.content }));
+      chatHistory.forEach(msg => {
+        if (msg.role === 'user') renderUserMessage(msg.content, false);
+        else renderAIMessage(msg.content, false);
+      });
+    }
+  } catch {
+    // Fallback to localStorage
+    const saved = localStorage.getItem('geneshield_chat_history');
+    if (saved) {
+      chatHistory = JSON.parse(saved);
+      chatHistory.forEach(msg => {
+        if (msg.role === 'user') renderUserMessage(msg.content, false);
+        else renderAIMessage(msg.content, false);
+      });
+    }
   }
-}
-
-function saveHistory() {
-  localStorage.setItem('geneshield_chat_history', JSON.stringify(chatHistory.slice(-50)));
-}
-
-// ── BUILD SYSTEM PROMPT FROM USER'S PROFILE + VITALS ──
-function getUserContext() {
-  const profile = JSON.parse(localStorage.getItem('geneshield_profile') || '{}');
-  const vitals = JSON.parse(localStorage.getItem('geneshield_vitals') || '[]');
-  const latest = vitals[0] || {};
-
-  return `
-You are GeneShield AI, a caring and knowledgeable hereditary cancer companion for ${profile.firstName || 'the user'}.
-
-Your PRIMARY focus is cancer — specifically hereditary cancer risk, screening guidance, prevention, and early detection. The three generic NCDs (diabetes, hypertension, cardiovascular) are in future scope and should NOT be the focus of your responses.
-
-USER PROFILE:
-- Name: ${profile.firstName || 'User'} ${profile.lastName || ''}
-- District: ${profile.district || 'Botswana'}
-- Current conditions: ${profile.currentConditions?.join(', ') || 'None reported'}
-- Medications: ${profile.medications || 'None'}
-- Exercise: ${profile.exercise || 'Unknown'} | Diet: ${profile.diet || 'Unknown'}
-- Smoking: ${profile.smoke || 'Unknown'} | Alcohol: ${profile.alcohol || 'Unknown'}
-
-FAMILY CANCER HISTORY (Hereditary Risk Factors):
-- Father's side: ${profile.fatherHistory?.join(', ') || 'Unknown'}
-- Mother's side: ${profile.motherHistory?.join(', ') || 'Unknown'}
-- Grandparents: ${profile.grandHistory?.join(', ') || 'Unknown'}
-
-AI HEREDITARY CANCER RISK SCORES:
-- Breast Cancer: 72% (HIGH) | Colorectal Cancer: 54% (MODERATE) | Cervical Cancer: 48% (MODERATE) | Prostate Cancer: 19% (LOW)
-
-LATEST REPORTED SYMPTOMS:
-- Symptoms: ${latest.symptoms?.join(', ') || 'None reported'}
-- Weight: ${latest.weight || 'Unknown'} kg
-- Notes: ${latest.notes || 'None'}
-
-GUIDELINES:
-- Be warm, encouraging, and conversational — not clinical or robotic
-- Focus on CANCER — risk, screening, prevention, early detection, family history implications
-- Give practical, actionable screening advice (mammograms, Pap smears, colonoscopy, PSA tests)
-- Reference their actual hereditary risk data when relevant
-- Always remind them to consult a doctor or oncologist for serious concerns
-- Keep responses concise (2-4 paragraphs max)
-- NEVER diagnose — provide information and guidance only
-- This is a Botswana context — be aware of local health realities and available resources
-- Encourage regular screening — early detection is the single most powerful tool against cancer mortality
-`.trim();
 }
 
 // ── RENDER ──
@@ -115,7 +76,7 @@ function getTime() {
   return new Date().toLocaleTimeString('en-BW', { hour: '2-digit', minute: '2-digit' });
 }
 
-// ── SEND ──
+// ── SEND (via Flask backend) ──
 async function sendMessage(userText) {
   if (!userText.trim() || isTyping) return;
   isTyping = true;
@@ -131,31 +92,14 @@ async function sendMessage(userText) {
   showTyping();
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        max_tokens: 800,
-        system: getUserContext(),
-        messages: chatHistory.map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-
-    const data = await response.json();
-    const aiReply = data.content?.[0]?.text || "I'm sorry, I couldn't process that. Please try again.";
+    const aiReply = await sendChatMessage(userText);
     chatHistory.push({ role: 'assistant', content: aiReply });
-    saveHistory();
     removeTyping();
     renderAIMessage(aiReply);
   } catch (err) {
     removeTyping();
-    renderAIMessage("I'm having trouble connecting right now. Please check your internet connection and try again. 💙");
-    console.error('Claude API error:', err);
+    renderAIMessage("I'm having trouble connecting right now. Please check your internet connection and try again.");
+    console.error('Chat error:', err);
   }
 
   isTyping = false;
@@ -198,16 +142,17 @@ if (sendBtn) {
 // ── CLEAR CHAT ──
 const clearChatBtn = document.getElementById('clearChat');
 if (clearChatBtn) {
-  clearChatBtn.addEventListener('click', () => {
+  clearChatBtn.addEventListener('click', async () => {
     if (confirm('Clear all chat history? This cannot be undone.')) {
       chatHistory = [];
       localStorage.removeItem('geneshield_chat_history');
+      try { await clearChatHistory(); } catch (e) { console.error('Clear chat error:', e); }
       const messages = document.getElementById('chatMessages');
       messages.innerHTML = `
         <div class="msg-row ai">
           <div class="msg-avatar"><i class='bx bx-bot'></i></div>
           <div class="msg-bubble ai">
-            <p>Chat cleared! 👋 I'm still here. How can I help you today?</p>
+            <p>Chat cleared! I'm still here. How can I help you today?</p>
             <span class="msg-time">${getTime()}</span>
           </div>
         </div>

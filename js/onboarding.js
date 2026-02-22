@@ -59,21 +59,25 @@ document.querySelectorAll('.toggle-options').forEach(group => {
   });
 });
 
-// None checkbox
+// None checkbox — deselects others in the same grid
 const noneCheck = document.getElementById('noneCheck');
 if (noneCheck) {
   noneCheck.addEventListener('change', () => {
     if (noneCheck.checked) {
-      document.querySelectorAll('.checkbox-grid input[type="checkbox"]').forEach(cb => {
-        if (cb !== noneCheck) cb.checked = false;
-      });
+      const grid = noneCheck.closest('.checkbox-grid');
+      if (grid) {
+        grid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          if (cb !== noneCheck) cb.checked = false;
+        });
+      }
     }
   });
 }
 
 document.getElementById('backBtn').disabled = true;
 
-function submitOnboarding() {
+async function submitOnboarding() {
+  // Collect all form data with cancer-specific field names
   const data = {
     firstName: document.getElementById('firstName').value,
     lastName: document.getElementById('lastName').value,
@@ -84,11 +88,14 @@ function submitOnboarding() {
     height: document.getElementById('height').value,
     weight: document.getElementById('weight').value,
     bloodType: document.getElementById('bloodType').value,
-    currentConditions: [...document.querySelectorAll('.checkbox-grid input:checked:not([name])')].map(i => i.value),
+    // Cancer-specific conditions from step 2
+    currentConditions: [...document.querySelectorAll('#conditionsGrid input:checked')].map(i => i.value).filter(v => v !== 'none'),
     medications: document.getElementById('medications').value,
-    fatherHistory: [...document.querySelectorAll('input[name="father"]:checked')].map(i => i.value),
-    motherHistory: [...document.querySelectorAll('input[name="mother"]:checked')].map(i => i.value),
-    grandHistory: [...document.querySelectorAll('input[name="grand"]:checked')].map(i => i.value),
+    // Cancer-specific family history from step 3
+    fatherHistory: [...document.querySelectorAll('input[name="father"]:checked')].map(i => i.value).filter(v => v !== 'unknown'),
+    motherHistory: [...document.querySelectorAll('input[name="mother"]:checked')].map(i => i.value).filter(v => v !== 'unknown'),
+    grandHistory: [...document.querySelectorAll('input[name="grand"]:checked')].map(i => i.value).filter(v => v !== 'unknown'),
+    // Lifestyle from step 4
     exercise: document.querySelector('#exerciseOptions .selected')?.dataset.value || '',
     diet: document.querySelector('#dietOptions .selected')?.dataset.value || '',
     smoke: document.querySelector('#smokeOptions .selected')?.dataset.value || '',
@@ -96,17 +103,42 @@ function submitOnboarding() {
     sleep: document.querySelector('#sleepOptions .selected')?.dataset.value || '',
   };
 
+  // Cache in localStorage
   localStorage.setItem('geneshield_profile', JSON.stringify(data));
 
-  // Loading overlay
+  // Show loading overlay
   const overlay = document.createElement('div');
-  overlay.style.cssText = `position:fixed;inset:0;background:linear-gradient(135deg,#0a0f1e,#002a45);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;color:white;font-family:'Inter',sans-serif;gap:20px;`;
+  overlay.className = 'ob-loading-overlay';
   overlay.innerHTML = `
-    <div style="width:64px;height:64px;background:#00b5ff;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;animation:spin 1s linear infinite;">🛡</div>
-    <h2 style="font-size:1.4rem;font-weight:800;">Analysing your cancer risk profile...</h2>
-    <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;">Running your hereditary cancer risk assessment</p>
+    <div style="width:64px;height:64px;background:rgba(255,255,255,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;animation:spin 1s linear infinite;">
+      <i class='bx bx-shield-plus' style="color:white;font-size:2rem;"></i>
+    </div>
+    <h2 style="font-size:1.4rem;font-weight:800;">Analysing your health profile...</h2>
+    <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;">Running your hereditary cancer risk assessment with ML engine</p>
     <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
   `;
   document.body.appendChild(overlay);
+
+  try {
+    // Save profile to Flask backend
+    await saveProfile(data);
+
+    // Calculate risks using ML engine (server-side), falls back to client-side
+    const scores = await calculateMLRiskScores(data);
+
+    // Cache scores in localStorage
+    localStorage.setItem('geneshield_risk_scores', JSON.stringify(scores));
+  } catch (err) {
+    console.error('Onboarding save error:', err);
+    // Even if server fails, try client-side fallback
+    try {
+      const fallbackScores = calculateRiskScores(data);
+      localStorage.setItem('geneshield_risk_scores', JSON.stringify(fallbackScores));
+      await saveRiskScores(fallbackScores);
+    } catch (e2) {
+      console.error('Fallback also failed:', e2);
+    }
+  }
+
   setTimeout(() => { window.location.href = 'dashboard.html'; }, 2500);
 }

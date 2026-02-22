@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeneShield · log in</title>
-  <!-- Font Awesome for icons (optional but clean) -->
+  <title>GeneShiled · sign up</title>
+  <!-- Font Awesome 6 (free) for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
@@ -23,11 +23,11 @@
       padding: 1.5rem;
     }
 
-    /* simple card – white with #00b5ff accents */
-    .login-container {
+    /* simple card – white with #00b5ff accents (identical to login) */
+    .signup-container {
       background: white;
       width: 100%;
-      max-width: 440px;
+      max-width: 480px;                  /* slightly wider for more fields */
       padding: 2.5rem 2rem 2.8rem 2rem;
       border-radius: 36px;
       box-shadow: 0 20px 35px -8px rgba(0, 181, 255, 0.2),    /* #00b5ff shadow */
@@ -37,12 +37,12 @@
       transition: transform 0.2s ease;
     }
 
-    .login-container:hover {
+    .signup-container:hover {
       transform: scale(1.01);
       box-shadow: 0 28px 40px -12px rgba(0, 181, 255, 0.3);
     }
 
-    /* GeneShiled branding — #00b5ff used everywhere */
+    /* GeneShiled branding — #00b5ff used everywhere (same as login) */
     .logo {
       margin-bottom: 1.8rem;
     }
@@ -88,10 +88,10 @@
     }
 
     /* form */
-    .login-form {
+    .signup-form {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.2rem;                    /* slightly tighter for many fields */
       margin-top: 1.5rem;
     }
 
@@ -125,15 +125,15 @@
       box-shadow: 0 0 0 4px rgba(0, 181, 255, 0.15);
     }
 
+    .input-wrapper:focus-within i {
+      color: #00b5ff;                       /* icon turns blue */
+    }
+
     .input-wrapper i {
       color: #7f9fbb;
       font-size: 1.2rem;
       width: 28px;
       transition: color 0.15s;
-    }
-
-    .input-wrapper:focus-within i {
-      color: #00b5ff;                       /* icon turns blue */
     }
 
     .input-wrapper input {
@@ -151,44 +151,20 @@
       font-weight: 300;
     }
 
-    /* simple options row */
-    .options-row {
+    /* name row - two fields inline */
+    .name-row {
       display: flex;
+      gap: 1rem;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      margin: 0.2rem 0 0.5rem;
     }
 
-    .remember {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: #2e4d6a;
-      cursor: pointer;
+    .name-row .input-group {
+      flex: 1;
     }
 
-    .remember input[type="checkbox"] {
-      accent-color: #00b5ff;                /* blue checkbox */
-      width: 18px;
-      height: 18px;
-      margin: 0;
-    }
 
-    .forgot-link {
-      color: #00b5ff;
-      text-decoration: none;
-      font-weight: 500;
-      border-bottom: 1px solid rgba(0, 181, 255, 0.2);
-    }
-
-    .forgot-link:hover {
-      color: #0080c0;
-      border-bottom-color: #00b5ff;
-    }
-
-    /* primary button — filled #00b5ff */
-    .login-btn {
+    /* primary button — filled #00b5ff (identical to login) */
+    .signup-btn {
       background: #00b5ff;
       border: none;
       border-radius: 60px;
@@ -204,102 +180,115 @@
       align-items: center;
       justify-content: center;
       gap: 0.6rem;
-      margin-top: 0.8rem;
+      margin-top: 1rem;
     }
 
-    .login-btn:hover {
+    .signup-btn:hover {
       background: #0099dd;
       transform: scale(1.02);
       box-shadow: 0 16px 24px -8px #00b5ff;
     }
 
-    .login-btn i {
+    .signup-btn i {
       font-size: 1.2rem;
     }
 
-    .signup-text {
+    .login-text {
       margin-top: 2rem;
       color: #4d6278;
       font-size: 0.95rem;
     }
 
-    .signup-text a {
+    .login-text a {
       color: #00b5ff;
       font-weight: 600;
       text-decoration: none;
       border-bottom: 2px solid rgba(0, 181, 255, 0.2);
     }
 
-    .signup-text a:hover {
+    .login-text a:hover {
       color: #007bb5;
       border-bottom-color: #00b5ff;
     }
 
-    /* tiny footer note */
-    .theme-note {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      color: #9cb1c5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border-top: 1px solid rgba(0, 181, 255, 0.2);
-      padding-top: 1.2rem;
-    }
-
-    .theme-note i {
-      color: #00b5ff;
-    }
-
-    /* remove extra style from previous, keep minimal */
-    hr {
-      display: none;
+    /* mobile tweak */
+    @media (max-width: 480px) {
+      .name-row {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
   <p style="position:absolute;top:1rem;left:1rem;font-size:0.9rem;"><a href="landing.html" style="color:#00b5ff;text-decoration:none;">← Home</a></p>
-  <div class="login-container">
-    <!-- GeneShiled logo with #00b5ff -->
+  <div class="signup-container">
+    <!-- GeneShiled logo with #00b5ff (identical to login) -->
     <div class="logo">
       <img src="logo GeneSheild" alt="GeneShield" style="height:60px;width:60px;border-radius:50%;object-fit:cover;margin-bottom:8px;">
       <h1>Gene<span>Shield</span></h1>
     </div>
 
-    <!-- simple login form -->
-    <form class="login-form" action="#" method="post" onsubmit="return false;">
-      <div class="input-group">
-        <label for="email">email or username</label>
-        <div class="input-wrapper">
-          <i class="fas fa-user"></i>
-          <input type="text" id="email" placeholder="you@example.com" autocomplete="username">
+    <!-- sign up form - matches login styling exactly -->
+    <form class="signup-form" action="dashboard.html" method="post">
+      <!-- first & last name row (inline) -->
+      <div class="name-row">
+        <div class="input-group">
+          <label for="firstname">first name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="firstname" placeholder="Alex" autocomplete="given-name">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="lastname">last name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="lastname" placeholder="Chen" autocomplete="family-name">
+          </div>
         </div>
       </div>
 
+      <!-- email -->
+      <div class="input-group">
+        <label for="email">email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="alex@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <!-- password -->
       <div class="input-group">
         <label for="password">password</label>
         <div class="input-wrapper">
           <i class="fas fa-lock"></i>
-          <input type="password" id="password" placeholder="········" autocomplete="current-password">
+          <input type="password" id="password" placeholder="········" autocomplete="new-password">
         </div>
       </div>
 
-      <div class="options-row">
-        <a href="#" class="forgot-link">Forgot password?</a>
+      <!-- confirm password -->
+      <div class="input-group">
+        <label for="confirm-password">confirm password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirm-password" placeholder="········" autocomplete="off">
+        </div>
       </div>
 
-      <button type="submit" class="login-btn">
-        <span>LOG IN</span>
+
+      <button type="submit" class="signup-btn">
+        <span>create account</span>
         <i class="fas fa-arrow-right"></i>
       </button>
     </form>
 
-    <div class="signup-text">
-      new here? <a href="signup.html">create account</a>
+    <div class="login-text">
+      already have an account? <a href="login.html">log in</a>
     </div>
 
-   
+
   </div>
   <script src="js/api.js"></script>
   <script>
@@ -308,38 +297,40 @@
       const user = await getCurrentUser();
       if (user) { window.location.href = 'dashboard.html'; return; }
 
-      const form = document.querySelector('.login-form');
-      const btn = form.querySelector('.login-btn');
+      const form = document.querySelector('.signup-form');
+      const btn = form.querySelector('.signup-btn');
 
       form.addEventListener('submit', async e => {
         e.preventDefault();
+        const firstName = form.querySelector('#firstname').value.trim();
+        const lastName = form.querySelector('#lastname').value.trim();
         const email = form.querySelector('#email').value.trim();
         const pass = form.querySelector('#password').value;
+        const confirm = form.querySelector('#confirm-password').value;
 
-        if (!email || !pass) { showToast('Please fill in all fields', 'error'); return; }
+        if (!firstName || !email || !pass) { showToast('Please fill in all required fields', 'error'); return; }
+        if (pass.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
+        if (pass !== confirm) { showToast('Passwords do not match', 'error'); return; }
 
         btn.disabled = true;
-        btn.innerHTML = '<span>Signing in...</span> <i class="fas fa-spinner fa-spin"></i>';
+        btn.innerHTML = '<span>Creating account...</span> <i class="fas fa-spinner fa-spin"></i>';
 
         try {
-          await signIn(email, pass);
-          // Check if profile exists — if not, send to onboarding
-          const profile = await getProfile();
-          if (profile && profile.first_name) {
-            window.location.href = 'dashboard.html';
-          } else {
-            window.location.href = 'onboarding.html';
-          }
+          // signUp auto-logs in via session
+          await signUp(email, pass, firstName, lastName);
+          showToast('Account created! Setting up your profile...', 'success');
+
+          setTimeout(() => { window.location.href = 'onboarding.html'; }, 1000);
         } catch (err) {
-          showToast(err.message || 'Invalid email or password', 'error');
+          showToast(err.message || 'Signup failed. Try again.', 'error');
           btn.disabled = false;
-          btn.innerHTML = '<span>LOG IN</span> <i class="fas fa-arrow-right"></i>';
+          btn.innerHTML = '<span>create account</span> <i class="fas fa-arrow-right"></i>';
         }
       });
     });
   </script>
 
-  <!-- (optional) very subtle background hint of blue, but stays white-dominant -->
+  <!-- subtle background element (same as login) -->
   <div style="position: fixed; bottom: 20px; right: 20px; opacity: 0.2; pointer-events: none; font-size: 3rem; color: #00b5ff;"> 
     <i class="fas fa-shield-virus"></i>
   </div>

@@ -13,7 +13,7 @@
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon"><i class='bx bx-shield-plus'></i></div>
+      <img src="logo GeneSheild" alt="GeneShield" style="height:36px;width:36px;border-radius:50%;object-fit:cover;">
       <span class="brand-name">Gene<span class="brand-accent">Shield</span></span>
     </div>
     <nav class="sidebar-nav">
@@ -24,7 +24,7 @@
       <a href="onboarding.html" class="nav-item"><i class='bx bx-user'></i><span>Profile</span></a>
     </nav>
     <div class="sidebar-footer">
-      <a href="index.html" class="nav-item logout"><i class='bx bx-log-out'></i><span>Logout</span></a>
+      <a href="#" class="nav-item logout" id="logoutBtn"><i class='bx bx-log-out'></i><span>Logout</span></a>
     </div>
   </aside>
 
@@ -40,6 +40,7 @@
           </div>
         </div>
       </div>
+      <button class="clear-chat-btn" id="clearChatBtn"><i class='bx bx-trash'></i> Clear Chat</button>
     </header>
 
     <div class="chat-layout">
@@ -49,8 +50,8 @@
           <div class="msg-row ai">
             <div class="msg-avatar"><i class='bx bx-bot'></i></div>
             <div class="msg-bubble ai">
-              <p>👋 Hello! I'm your GeneShield AI cancer companion. I help you understand your hereditary cancer risks, interpret your family history, and guide you toward the right screenings and preventive steps.</p>
-              <p style="margin-top:8px;">Based on your profile, you have a <strong>high hereditary Breast Cancer risk</strong> and moderate Colorectal Cancer risk. Let's talk about what that means and what you can do. Ask me anything!</p>
+              <p>Hello! I'm your GeneShield AI cancer companion. I help you understand your hereditary cancer risks, interpret your family history, and guide you toward the right screenings and preventive steps.</p>
+              <p style="margin-top:8px;">Ask me anything about cancer prevention, screening schedules, or lifestyle changes!</p>
               <span class="msg-time">Just now</span>
             </div>
           </div>
@@ -59,7 +60,7 @@
         <div class="suggested-prompts" id="suggestedPrompts">
           <span class="prompts-label">Suggested questions:</span>
           <div class="prompt-chips">
-            <button class="prompt-chip" onclick="sendPrompt(this)">What does high hereditary breast cancer risk mean for me?</button>
+            <button class="prompt-chip" onclick="sendPrompt(this)">What does my hereditary cancer risk mean for me?</button>
             <button class="prompt-chip" onclick="sendPrompt(this)">When should I get a mammogram given my family history?</button>
             <button class="prompt-chip" onclick="sendPrompt(this)">What are early warning signs of colorectal cancer?</button>
             <button class="prompt-chip" onclick="sendPrompt(this)">How can I reduce my cancer risk through lifestyle changes?</button>
@@ -79,21 +80,15 @@
       <div class="chat-side-panel">
         <div class="side-card">
           <h4><i class='bx bx-user-circle'></i> Your Health Context</h4>
-          <div class="context-items">
-            <div class="ctx-item"><span class="ctx-label">Breast Cancer Risk</span><span class="ctx-val high">High · 72%</span></div>
-            <div class="ctx-item"><span class="ctx-label">Colorectal Cancer Risk</span><span class="ctx-val warn">Moderate · 54%</span></div>
-            <div class="ctx-item"><span class="ctx-label">Cervical Cancer Risk</span><span class="ctx-val warn">Moderate · 48%</span></div>
-            <div class="ctx-item"><span class="ctx-label">Prostate Cancer Risk</span><span class="ctx-val ok">Low · 19%</span></div>
-            <div class="ctx-item"><span class="ctx-label">Last Screening</span><span class="ctx-val warn">Overdue</span></div>
+          <div class="context-items" id="contextItems">
+            <div class="ctx-item"><span class="ctx-label">Loading risks...</span><span class="ctx-val">--</span></div>
           </div>
         </div>
 
         <div class="side-card">
           <h4><i class='bx bx-history'></i> Previous Sessions</h4>
           <div class="history-sessions">
-            <div class="session-item active"><i class='bx bx-chat'></i><div><span class="session-title">Today's Session</span><span class="session-date">Feb 21, 2026</span></div></div>
-            <div class="session-item"><i class='bx bx-chat'></i><div><span class="session-title">Mammogram scheduling</span><span class="session-date">Feb 19, 2026</span></div></div>
-            <div class="session-item"><i class='bx bx-chat'></i><div><span class="session-title">Diet & cancer prevention</span><span class="session-date">Feb 16, 2026</span></div></div>
+            <div class="session-item active"><i class='bx bx-chat'></i><div><span class="session-title">Current Session</span><span class="session-date">Today</span></div></div>
           </div>
         </div>
 
@@ -110,16 +105,48 @@
     </div>
   </main>
 
+  <script src="js/api.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/chat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
   <script>
+    async function loadSidePanel() {
+      try {
+        const scores = await getLatestRiskScores();
+        const ctx = document.getElementById('contextItems');
+        if (scores) {
+          const items = [];
+          const riskNames = {
+            breast_cancer: 'Breast Cancer Risk',
+            cervical_cancer: 'Cervical Cancer Risk',
+            prostate_cancer: 'Prostate Cancer Risk',
+            colorectal_cancer: 'Colorectal Cancer Risk'
+          };
+          for (const [key, label] of Object.entries(riskNames)) {
+            const val = scores[key];
+            if (val !== undefined && val !== null) {
+              const cls = val >= 60 ? 'high' : val >= 40 ? 'warn' : 'ok';
+              const lvl = val >= 60 ? 'High' : val >= 40 ? 'Moderate' : 'Low';
+              items.push(`<div class="ctx-item"><span class="ctx-label">${label}</span><span class="ctx-val ${cls}">${lvl} · ${val}%</span></div>`);
+            }
+          }
+          if (items.length > 0) {
+            ctx.innerHTML = items.join('');
+          } else {
+            ctx.innerHTML = '<div class="ctx-item"><span class="ctx-label">No scores yet</span><span class="ctx-val">--</span></div>';
+          }
+        }
+      } catch (err) {
+        console.error('Side panel load error:', err);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       await requireAuth();
-      const logoutLink = document.querySelector('.sidebar .logout');
-      if (logoutLink) {
-        logoutLink.addEventListener('click', async (e) => {
+      loadSidePanel();
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
           e.preventDefault();
           try { await signOut(); } catch { window.location.href = 'login.html'; }
         });
