@@ -116,6 +116,11 @@ a { text-decoration: none; color: inherit; }
 .tip-card.green i, .tip-card.green strong { color: var(--success); }
 .tip-card.green p { color: #064e3b; }
 
+/* ── LOADING PLACEHOLDER ── */
+.risk-loading { text-align: center; padding: 40px; color: var(--gray); }
+.risk-loading i { font-size: 2rem; color: var(--primary); animation: spin 1s linear infinite; display: block; margin-bottom: 12px; }
+@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) { .risk-grid { grid-template-columns: repeat(2,1fr); } .tips-grid { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .main-content { margin-left: 0; } .menu-toggle { display: block; } .two-col { grid-template-columns: 1fr; } }

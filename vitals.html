@@ -13,7 +13,7 @@
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon"><i class='bx bx-shield-plus'></i></div>
+      <img src="logo GeneSheild" alt="GeneShield" style="height:36px;width:36px;border-radius:50%;object-fit:cover;">
       <span class="brand-name">Gene<span class="brand-accent">Shield</span></span>
     </div>
     <nav class="sidebar-nav">
@@ -24,7 +24,7 @@
       <a href="onboarding.html" class="nav-item"><i class='bx bx-user'></i><span>Profile</span></a>
     </nav>
     <div class="sidebar-footer">
-      <a href="index.html" class="nav-item logout"><i class='bx bx-log-out'></i><span>Logout</span></a>
+      <a href="#" class="nav-item logout" id="logoutBtn"><i class='bx bx-log-out'></i><span>Logout</span></a>
     </div>
   </aside>
 
@@ -39,10 +39,10 @@
     <div class="dashboard-body">
 
       <div class="quick-stats">
-        <div class="qs-card"><i class='bx bx-calendar-check'></i><div><span class="qs-num">5</span><span class="qs-label">Day Streak</span></div></div>
-        <div class="qs-card"><i class='bx bx-list-check'></i><div><span class="qs-num">12</span><span class="qs-label">Total Logs</span></div></div>
-        <div class="qs-card"><i class='bx bx-trending-up'></i><div><span class="qs-num">3</span><span class="qs-label">Alerts</span></div></div>
-        <div class="qs-card"><i class='bx bx-time'></i><div><span class="qs-num">Today</span><span class="qs-label">Last Logged</span></div></div>
+        <div class="qs-card"><i class='bx bx-calendar-check'></i><div><span class="qs-num" id="dayStreak">--</span><span class="qs-label">Day Streak</span></div></div>
+        <div class="qs-card"><i class='bx bx-list-check'></i><div><span class="qs-num" id="totalLogs">--</span><span class="qs-label">Total Logs</span></div></div>
+        <div class="qs-card"><i class='bx bx-trending-up'></i><div><span class="qs-num" id="alertCount">0</span><span class="qs-label">Alerts</span></div></div>
+        <div class="qs-card"><i class='bx bx-time'></i><div><span class="qs-num" id="lastLogged">--</span><span class="qs-label">Last Logged</span></div></div>
       </div>
 
       <div class="vitals-layout">
@@ -61,17 +61,17 @@
                 <div class="bp-divider">/</div>
                 <div class="bp-field"><label>Diastolic</label><input type="number" id="bpDiastolic" placeholder="80" min="40" max="150" /></div>
               </div>
-              <div class="vic-ref">Normal: &lt;120/80 · Elevated: 120–129 · High: &gt;130/80</div>
+              <div class="vic-ref">Normal: &lt;120/80 · Elevated: 120-129 · High: &gt;130/80</div>
             </div>
             <div class="vital-input-card">
               <div class="vic-header"><div class="vic-icon glucose"><i class='bx bx-droplet'></i></div><div><h4>Blood Glucose</h4><span>mmol/L</span></div></div>
               <div class="single-input"><input type="number" id="glucose" placeholder="5.5" min="2" max="30" step="0.1" /></div>
-              <div class="vic-ref">Fasting normal: 3.9–5.5 · Pre-diabetes: 5.6–6.9 · Diabetes: ≥7.0</div>
+              <div class="vic-ref">Fasting normal: 3.9-5.5 · Pre-diabetes: 5.6-6.9 · Diabetes: >=7.0</div>
             </div>
             <div class="vital-input-card">
               <div class="vic-header"><div class="vic-icon hr"><i class='bx bx-heart'></i></div><div><h4>Heart Rate</h4><span>bpm</span></div></div>
               <div class="single-input"><input type="number" id="heartRate" placeholder="72" min="30" max="220" /></div>
-              <div class="vic-ref">Resting normal: 60–100 bpm</div>
+              <div class="vic-ref">Resting normal: 60-100 bpm</div>
             </div>
             <div class="vital-input-card">
               <div class="vic-header"><div class="vic-icon weight"><i class='bx bx-dumbbell'></i></div><div><h4>Weight</h4><span>kg</span></div></div>
@@ -81,7 +81,7 @@
             <div class="vital-input-card">
               <div class="vic-header"><div class="vic-icon temp"><i class='bx bx-thermometer'></i></div><div><h4>Temperature</h4><span>°C</span></div></div>
               <div class="single-input"><input type="number" id="temperature" placeholder="36.6" min="34" max="42" step="0.1" /></div>
-              <div class="vic-ref">Normal: 36.1–37.2°C · Fever: ≥38°C</div>
+              <div class="vic-ref">Normal: 36.1-37.2°C · Fever: >=38°C</div>
             </div>
           </div>
 
@@ -110,36 +110,7 @@
         <section class="section-block">
           <div class="section-title-row"><h3 class="section-title">Recent History</h3></div>
           <div class="history-list" id="historyList">
-            <div class="history-entry">
-              <div class="he-date">Feb 20, 2026</div>
-              <div class="he-metrics">
-                <div class="he-metric"><span class="he-label">BP</span><span class="he-val warn">128/84</span></div>
-                <div class="he-metric"><span class="he-label">Glucose</span><span class="he-val ok">6.2</span></div>
-                <div class="he-metric"><span class="he-label">HR</span><span class="he-val ok">72</span></div>
-                <div class="he-metric"><span class="he-label">Weight</span><span class="he-val ok">78.4</span></div>
-              </div>
-              <span class="he-sym">No symptoms</span>
-            </div>
-            <div class="history-entry">
-              <div class="he-date">Feb 18, 2026</div>
-              <div class="he-metrics">
-                <div class="he-metric"><span class="he-label">BP</span><span class="he-val ok">122/79</span></div>
-                <div class="he-metric"><span class="he-label">Glucose</span><span class="he-val ok">5.8</span></div>
-                <div class="he-metric"><span class="he-label">HR</span><span class="he-val ok">68</span></div>
-                <div class="he-metric"><span class="he-label">Weight</span><span class="he-val ok">78.1</span></div>
-              </div>
-              <span class="he-sym">Headache</span>
-            </div>
-            <div class="history-entry">
-              <div class="he-date">Feb 15, 2026</div>
-              <div class="he-metrics">
-                <div class="he-metric"><span class="he-label">BP</span><span class="he-val high">135/88</span></div>
-                <div class="he-metric"><span class="he-label">Glucose</span><span class="he-val warn">7.1</span></div>
-                <div class="he-metric"><span class="he-label">HR</span><span class="he-val ok">75</span></div>
-                <div class="he-metric"><span class="he-label">Weight</span><span class="he-val ok">78.6</span></div>
-              </div>
-              <span class="he-sym">Fatigue, Headache</span>
-            </div>
+            <p style="color:var(--gray);font-size:0.85rem;text-align:center;padding:20px;">No vitals logged yet.</p>
           </div>
         </section>
 
@@ -149,16 +120,16 @@
 
   <div class="toast" id="toast"><i class='bx bx-check-circle'></i><span>Symptoms logged! Your AI companion has been updated with today's data.</span></div>
 
+  <script src="js/api.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/vitals.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Authentication disabled for local frontend workflow; backend integration later.
-      const logoutLink = document.querySelector('.sidebar .logout');
-      if (logoutLink) {
-        logoutLink.addEventListener('click', async (e) => {
+      await requireAuth();
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
           e.preventDefault();
           try { await signOut(); } catch { window.location.href = 'login.html'; }
         });

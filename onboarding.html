@@ -11,10 +11,9 @@
 </head>
 <body>
 
-  <!-- replicates the dashboard sidebar for uniform layout -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon"><i class='bx bx-shield-plus'></i></div>
+      <img src="logo GeneSheild" alt="GeneShield" style="height:36px;width:36px;border-radius:50%;object-fit:cover;">
       <span class="brand-name">Gene<span class="brand-accent">Shield</span></span>
     </div>
     <nav class="sidebar-nav">
@@ -25,15 +24,9 @@
       <a href="#" class="nav-item active"><i class='bx bx-user'></i><span>Profile</span></a>
     </nav>
     <div class="sidebar-footer">
-      <a href="index.html" class="nav-item logout"><i class='bx bx-log-out'></i><span>Logout</span></a>
+      <a href="#" class="nav-item logout" id="logoutBtn"><i class='bx bx-log-out'></i><span>Logout</span></a>
     </div>
   </aside>
-
-  <!--
-    WORKFLOW NOTE:
-    landing.html (or index.html) → index.html → [login.html / signup.html — ATLANG'S FILES] → onboarding.html → dashboard.html
-    Once Atlang's files are ready, the signup success handler should redirect here.
-  -->
 
   <main class="main-content">
     <header class="topbar">
@@ -153,7 +146,7 @@
         </div>
         <div class="form-group full-width mt-16">
           <label>Do you currently have any of these conditions? <span class="label-hint">(Select all that apply)</span></label>
-          <div class="checkbox-grid">
+          <div class="checkbox-grid" id="conditionsGrid">
             <label class="check-item"><input type="checkbox" value="breast_cancer" /><i class='bx bx-ribbon'></i> Breast Cancer</label>
             <label class="check-item"><input type="checkbox" value="cervical_cancer" /><i class='bx bx-female'></i> Cervical Cancer</label>
             <label class="check-item"><input type="checkbox" value="colorectal_cancer" /><i class='bx bx-dna'></i> Colorectal Cancer</label>
@@ -234,8 +227,8 @@
           <div class="option-cards" id="exerciseOptions">
             <div class="option-card" data-value="never"><i class='bx bx-x-circle'></i><span>Never</span></div>
             <div class="option-card" data-value="rarely"><i class='bx bx-time'></i><span>Rarely</span></div>
-            <div class="option-card" data-value="sometimes"><i class='bx bx-walk'></i><span>1–2x / week</span></div>
-            <div class="option-card" data-value="regularly"><i class='bx bx-run'></i><span>3–4x / week</span></div>
+            <div class="option-card" data-value="sometimes"><i class='bx bx-walk'></i><span>1-2x / week</span></div>
+            <div class="option-card" data-value="regularly"><i class='bx bx-run'></i><span>3-4x / week</span></div>
             <div class="option-card" data-value="daily"><i class='bx bx-cycling'></i><span>Daily</span></div>
           </div>
         </div>
@@ -270,8 +263,8 @@
           <label>Average sleep per night</label>
           <div class="option-cards" id="sleepOptions">
             <div class="option-card" data-value="lt5"><i class='bx bx-moon'></i><span>Less than 5hrs</span></div>
-            <div class="option-card" data-value="5-6"><i class='bx bx-moon'></i><span>5–6 hrs</span></div>
-            <div class="option-card" data-value="7-8"><i class='bx bx-moon'></i><span>7–8 hrs</span></div>
+            <div class="option-card" data-value="5-6"><i class='bx bx-moon'></i><span>5-6 hrs</span></div>
+            <div class="option-card" data-value="7-8"><i class='bx bx-moon'></i><span>7-8 hrs</span></div>
             <div class="option-card" data-value="gt8"><i class='bx bx-moon'></i><span>More than 8hrs</span></div>
           </div>
         </div>
@@ -290,15 +283,21 @@
         <button class="btn-next" id="nextBtn" onclick="changeStep(1)">Next <i class='bx bx-right-arrow-alt'></i></button>
       </div>
 
+    </div> <!-- end ob-card -->
     </div> <!-- end .ob-main -->
   </main>
 
+  <script src="js/api.js"></script>
   <script src="js/onboarding.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Authentication disabled for local frontend workflow; backend integration later.
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await signOut(); } catch { window.location.href = 'login.html'; }
+        });
+      }
     });
   </script>
 </body>

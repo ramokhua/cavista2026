@@ -95,6 +95,9 @@ a { text-decoration: none; color: inherit; }
 .mt-16 { margin-top: 16px; }
 .mt-24 { margin-top: 24px; }
 
+/* ── LOADING OVERLAY ── */
+.ob-loading-overlay { position: fixed; inset: 0; background: linear-gradient(135deg,#00b5ff,#002a45); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: white; font-family: 'Inter', sans-serif; gap: 20px; }
+
 @media (max-width: 600px) {
   .ob-card { padding: 28px 20px 24px; }
   .form-grid { grid-template-columns: 1fr; }
