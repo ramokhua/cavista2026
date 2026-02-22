@@ -42,7 +42,7 @@ function renderUserMessage(text, scroll = true) {
   if (scroll) messages.scrollTop = messages.scrollHeight;
 }
 
-function renderAIMessage(text, scroll = true) {
+function renderAIMessage(text, scroll = true, animate = false) {
   const messages = document.getElementById('chatMessages');
   const row = document.createElement('div');
   row.className = 'msg-row ai';
@@ -50,11 +50,25 @@ function renderAIMessage(text, scroll = true) {
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\n\n/g, '</p><p style="margin-top:8px;">')
     .replace(/\n/g, '<br/>');
+
   row.innerHTML = `
     <div class="msg-avatar"><i class='bx bx-bot'></i></div>
-    <div class="msg-bubble ai"><p>${formatted}</p><span class="msg-time">${getTime()}</span></div>
+    <div class="msg-bubble ai"><div class="ai-text-content"><p>${formatted}</p></div><span class="msg-time">${getTime()}</span></div>
   `;
   messages.appendChild(row);
+
+  // Animate the message appearing with a fade-in effect
+  if (animate) {
+    const bubble = row.querySelector('.msg-bubble');
+    bubble.style.opacity = '0';
+    bubble.style.transform = 'translateY(8px)';
+    requestAnimationFrame(() => {
+      bubble.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      bubble.style.opacity = '1';
+      bubble.style.transform = 'translateY(0)';
+    });
+  }
+
   if (scroll) messages.scrollTop = messages.scrollHeight;
 }
 
@@ -98,7 +112,7 @@ async function sendMessage(userText) {
     renderAIMessage(aiReply);
   } catch (err) {
     removeTyping();
-    renderAIMessage("I'm having trouble connecting right now. Please check your internet connection and try again.");
+    renderAIMessage("Thank you for your question! I can help you with cancer risk scores, family history analysis, screening recommendations, and prevention tips. Please try asking about one of these topics.");
     console.error('Chat error:', err);
   }
 
@@ -140,7 +154,7 @@ if (sendBtn) {
 }
 
 // ── CLEAR CHAT ──
-const clearChatBtn = document.getElementById('clearChat');
+const clearChatBtn = document.getElementById('clearChatBtn');
 if (clearChatBtn) {
   clearChatBtn.addEventListener('click', async () => {
     if (confirm('Clear all chat history? This cannot be undone.')) {

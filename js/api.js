@@ -295,6 +295,306 @@ async function clearChatHistory() {
 }
 
 // ============================================
+// REPORT GENERATION (PDF)
+// ============================================
+
+async function getReportData() {
+  const res = await fetch(`${API_BASE}/api/generate-report`, { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to fetch report data');
+  const data = await res.json();
+  return data.report;
+}
+
+async function generatePDFReport() {
+  showToast('Generating your report...', 'success');
+
+  const report = await getReportData();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
+  const W = doc.internal.pageSize.getWidth();
+  const margin = 18;
+  const contentW = W - margin * 2;
+  let y = 15;
+
+  // Colors
+  const PRIMARY = [0, 181, 255];
+  const DARK = [30, 41, 59];
+  const GRAY = [100, 116, 139];
+  const WHITE = [255, 255, 255];
+  const RED = [239, 68, 68];
+  const AMBER = [245, 158, 11];
+  const GREEN = [34, 197, 94];
+
+  function addPage() {
+    doc.addPage();
+    y = 15;
+  }
+
+  function checkPageBreak(needed) {
+    if (y + needed > 275) { addPage(); return true; }
+    return false;
+  }
+
+  // ── HEADER ──
+  doc.setFillColor(...PRIMARY);
+  doc.rect(0, 0, W, 42, 'F');
+  doc.setTextColor(...WHITE);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('GeneShield', margin, 18);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Hereditary Cancer Risk Assessment Report', margin, 26);
+  doc.setFontSize(8);
+  const dateStr = new Date(report.generated_at).toLocaleDateString('en-BW', { year: 'numeric', month: 'long', day: 'numeric' });
+  doc.text(`Generated: ${dateStr}`, margin, 33);
+  doc.text('CONFIDENTIAL - For Patient & Healthcare Provider Use Only', W - margin, 33, { align: 'right' });
+
+  y = 52;
+
+  // ── PATIENT INFO ──
+  doc.setTextColor(...DARK);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Patient Information', margin, y);
+  y += 2;
+  doc.setDrawColor(...PRIMARY);
+  doc.setLineWidth(0.8);
+  doc.line(margin, y, margin + 50, y);
+  y += 7;
+
+  const p = report.profile || {};
+  const u = report.user || {};
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+
+  const infoRows = [
+    ['Name', `${p.first_name || u.first_name || '--'} ${p.last_name || u.last_name || ''}`],
+    ['Gender', p.gender || '--'],
+    ['Date of Birth', p.dob || '--'],
+    ['District', p.district || '--'],
+    ['Blood Type', p.blood_type || '--'],
+    ['BMI', report.bmi ? `${report.bmi} (${report.bmi_category})` : '--'],
+  ];
+
+  infoRows.forEach(([label, value]) => {
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...GRAY);
+    doc.text(`${label}:`, margin, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...DARK);
+    doc.text(String(value), margin + 35, y);
+    y += 5.5;
+  });
+
+  // Lifestyle
+  y += 3;
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...GRAY);
+  doc.setFontSize(8);
+  const lifestyle = `Exercise: ${p.exercise || '--'}  |  Diet: ${p.diet || '--'}  |  Smoking: ${p.smoke || '--'}  |  Alcohol: ${p.alcohol || '--'}`;
+  doc.text(lifestyle, margin, y);
+  y += 10;
+
+  // ── RISK SCORES ──
+  checkPageBreak(60);
+  doc.setTextColor(...DARK);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Hereditary Cancer Risk Assessment', margin, y);
+  y += 2;
+  doc.setDrawColor(...PRIMARY);
+  doc.line(margin, y, margin + 60, y);
+  y += 8;
+
+  const scores = report.risk_scores || {};
+  const riskTypes = [
+    { key: 'breast_cancer', label: 'Breast Cancer' },
+    { key: 'cervical_cancer', label: 'Cervical Cancer' },
+    { key: 'prostate_cancer', label: 'Prostate Cancer' },
+    { key: 'colorectal_cancer', label: 'Colorectal Cancer' },
+  ];
+
+  riskTypes.forEach(({ key, label }) => {
+    const val = scores[key];
+    if (val === undefined || val === null) return;
+    checkPageBreak(14);
+
+    const level = val >= 60 ? 'HIGH' : val >= 40 ? 'MODERATE' : 'LOW';
+    const color = val >= 60 ? RED : val >= 40 ? AMBER : GREEN;
+
+    // Risk bar background
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(margin, y, contentW, 11, 2, 2, 'F');
+
+    // Risk bar fill
+    const fillW = Math.max((val / 100) * contentW, 2);
+    doc.setFillColor(...color);
+    doc.roundedRect(margin, y, fillW, 11, 2, 2, 'F');
+
+    // Label + percentage
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...WHITE);
+    const labelX = margin + 4;
+    doc.text(label, labelX, y + 7.2);
+
+    doc.setTextColor(...DARK);
+    doc.text(`${val}%  (${level})`, W - margin, y + 7.2, { align: 'right' });
+
+    y += 15;
+  });
+
+  // ── FAMILY HISTORY ──
+  y += 3;
+  checkPageBreak(40);
+  doc.setTextColor(...DARK);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Family Cancer History', margin, y);
+  y += 2;
+  doc.setDrawColor(...PRIMARY);
+  doc.line(margin, y, margin + 45, y);
+  y += 8;
+
+  doc.setFontSize(9);
+  const fatherH = p.father_history || [];
+  const motherH = p.mother_history || [];
+  const grandH = p.grand_history || [];
+
+  const historyItems = [
+    ["Father's Side", fatherH],
+    ["Mother's Side", motherH],
+    ["Grandparents", grandH],
+  ];
+
+  historyItems.forEach(([rel, cancers]) => {
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...GRAY);
+    doc.text(`${rel}:`, margin, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...DARK);
+    const cancerStr = cancers.length > 0
+      ? cancers.map(c => c.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')
+      : 'No cancer history reported';
+    doc.text(cancerStr, margin + 32, y);
+    y += 6;
+  });
+
+  // ── SCREENING RECOMMENDATIONS ──
+  y += 5;
+  checkPageBreak(40);
+  doc.setTextColor(...DARK);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Screening Recommendations', margin, y);
+  y += 2;
+  doc.setDrawColor(...PRIMARY);
+  doc.line(margin, y, margin + 52, y);
+  y += 8;
+
+  const recs = report.recommendations || [];
+  if (recs.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(...GRAY);
+    doc.text('Complete your health profile to receive personalized screening recommendations.', margin, y);
+    y += 8;
+  } else {
+    recs.forEach(rec => {
+      checkPageBreak(16);
+      const urgColor = rec.urgency === 'HIGH' ? RED : GREEN;
+      doc.setFillColor(...urgColor);
+      doc.circle(margin + 2, y - 1, 1.5, 'F');
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...DARK);
+      doc.text(`${rec.type}  [${rec.urgency}]`, margin + 7, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...GRAY);
+      const lines = doc.splitTextToSize(rec.detail, contentW - 7);
+      doc.text(lines, margin + 7, y);
+      y += lines.length * 4.5 + 4;
+    });
+  }
+
+  // ── VITALS HISTORY ──
+  const vitals = report.vitals || [];
+  if (vitals.length > 0) {
+    y += 3;
+    checkPageBreak(30);
+    doc.setTextColor(...DARK);
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Recent Vitals', margin, y);
+    y += 2;
+    doc.setDrawColor(...PRIMARY);
+    doc.line(margin, y, margin + 30, y);
+    y += 8;
+
+    // Table header
+    doc.setFillColor(240, 245, 250);
+    doc.rect(margin, y - 4, contentW, 7, 'F');
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...GRAY);
+    const cols = [margin + 2, margin + 30, margin + 55, margin + 78, margin + 100, margin + 120, margin + 142];
+    const headers = ['Date', 'BP (mmHg)', 'Glucose', 'Heart Rate', 'Weight', 'Temp', 'SpO2'];
+    headers.forEach((h, i) => doc.text(h, cols[i], y));
+    y += 6;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...DARK);
+    vitals.slice(0, 8).forEach(v => {
+      checkPageBreak(7);
+      const date = v.logged_at ? new Date(v.logged_at).toLocaleDateString('en-BW', { month: 'short', day: 'numeric' }) : '--';
+      const bp = v.bp_systolic ? `${v.bp_systolic}/${v.bp_diastolic || '--'}` : '--';
+      const vals = [date, bp, v.glucose || '--', v.heart_rate || '--', v.weight || '--', v.temperature || '--', v.oxygen || '--'];
+      vals.forEach((val, i) => doc.text(String(val), cols[i], y));
+      y += 5;
+    });
+  }
+
+  // ── FOOTER ──
+  y += 8;
+  checkPageBreak(25);
+  doc.setDrawColor(220, 220, 220);
+  doc.line(margin, y, W - margin, y);
+  y += 6;
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(...GRAY);
+  const disclaimer = [
+    'DISCLAIMER: This report is generated by GeneShield AI and is intended for informational purposes only.',
+    'It does not constitute a medical diagnosis. Risk scores are based on hereditary analysis, machine learning models,',
+    'and self-reported data. Please consult a qualified healthcare professional for medical advice.',
+    '',
+    'For screening services in Botswana: Princess Marina Hospital (Gaborone) | Nyangabgwe Referral Hospital (Francistown)',
+  ];
+  disclaimer.forEach(line => {
+    doc.text(line, W / 2, y, { align: 'center' });
+    y += 3.8;
+  });
+
+  // Page numbers
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...GRAY);
+    doc.text(`Page ${i} of ${totalPages}`, W / 2, 290, { align: 'center' });
+    doc.text('GeneShield - Confidential', W - margin, 290, { align: 'right' });
+  }
+
+  // Save / download
+  const fname = `GeneShield_Report_${(p.first_name || 'User').replace(/\s/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`;
+  doc.save(fname);
+  showToast('Report downloaded successfully!', 'success');
+}
+
+// ============================================
 // UTILITY: TOAST NOTIFICATIONS
 // ============================================
 
